@@ -18,7 +18,7 @@ class Player {
     public:
         char skin;
         Position pos;
-        Player(std::string name) : name(name), score(0), skin('Y') {};
+        Player(std::string name, char skin) : name(name), score(0), skin(skin) {};
         ~Player();
 
         void setName(std::string& name);

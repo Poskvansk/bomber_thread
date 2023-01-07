@@ -3,6 +3,7 @@
 #include <string>
 #include <thread>
 #include <mutex>
+#include <unordered_map>
 
 //////////////////////////////////////////
 #include "player.hpp"
@@ -29,6 +30,8 @@ mutex mtx_input;
 
 const int MAP_WIDTH = 150;
 const int MAP_HEIGHT = 15;
+
+unordered_map<string, int> player_id;
 
 void print_map(vector<Player>& players) {
 
@@ -70,30 +73,35 @@ void print_map(vector<Player>& players) {
     cout << endl;
 }
 
-void update(Player& player1) {
+void update(Player& player) {
 
     while (true) {
     
-        mtx_input.lock();
-        
-        if (Input::kbhit()) {
-            char input = Input::getch();  // Read a keystroke without waiting
-            if (input == 'w') player1.pos.y--;
-            else if (input == 's') player1.pos.y++;
-            else if (input == 'a') player1.pos.x--;
-            else if (input == 'd') player1.pos.x++;
+        if(player_id[player.getName()] == 0) {
+            
+            if (Input::kbhit()) {
+                char input = Input::getch();  // Read a keystroke without waiting
+                if (input == 'w') player.pos.y--;
+                else if (input == 's') player.pos.y++;
+                else if (input == 'a') player.pos.x--;
+                else if (input == 'd') player.pos.x++;
+            }
+        }
+        else {
+            if (Input::kbhit()) {
+                char input = Input::getch();  // Read a keystroke without waiting
+                if (input == 'i') player.pos.y--;
+                else if (input == 'k') player.pos.y++;
+                else if (input == 'j') player.pos.x--;
+                else if (input == 'l') player.pos.x++;
+            }
         }
 
-
-        if (player1.pos.x < 1) player1.pos.x = 1;
-        if (player1.pos.x > MAP_WIDTH - 2) player1.pos.x = MAP_WIDTH - 2;
-        if (player1.pos.y < 1) player1.pos.y = 1;
-        if (player1.pos.y > MAP_HEIGHT - 2) player1.pos.y = MAP_HEIGHT - 2;
-
-        mtx_input.unlock();
-        // check_collision();
+        if (player.pos.x < 1) player.pos.x = 1;
+        if (player.pos.x > MAP_WIDTH - 2) player.pos.x = MAP_WIDTH - 2;
+        if (player.pos.y < 1) player.pos.y = 1;
+        if (player.pos.y > MAP_HEIGHT - 2) player.pos.y = MAP_HEIGHT - 2;
     }
-
 }
 
 void render(vector<Player>& players) {
@@ -115,12 +123,14 @@ int main(int argc, char const *argv[]) {
     tcsetattr( STDIN_FILENO, TCSANOW, &newt);
 
     
-    Player player1("Fulano");
-    Player player2("Beltrano");
+    Player player1("Fulano", 'Y');
+    player_id[player1.getName()] = 0;
+
+    Player player2("Beltrano", 'P');
+    player_id[player2.getName()] = 1;
 
     vector<Player> players = {player1, player2};
 
-    // game_loop(players);
     thread t1(update, ref(players[0]));
     thread t2(update, ref(players[1]));
     thread render_thread(render, ref(players));
