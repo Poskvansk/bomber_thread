@@ -23,27 +23,39 @@ using namespace std;
     #include <termios.h>
 #endif
 
+
 Position p(5,5);
-Bomb bomb1(&p, 10);
+Bomb bomb1(p, 10);
+
+vector<Bomb> bombs = {bomb1};
 
 mutex mtx_input;
 
 const int MAP_WIDTH = 150;
 const int MAP_HEIGHT = 15;
 
+void print_infos(vector<Player>& players) {
+
+    cout << "player " << players[0].getName() << " position " << players[0].pos.x << " " << players[0].pos.y << " direction " << players[0].getDirection()
+    << " hasbomb " << players[0].getHasBomb();
+    cout << "               ";
+    cout << "player " << players[1].getName() << " position " << players[1].pos.x << " " << players[1].pos.y << " direction " << players[1].getDirection()
+    << " hasbomb " << players[1].getHasBomb() << endl;
+
+    cout << "bomb " << bombs[0].pos.x << " " << bombs[0].pos.y << " holded by " << bombs[0].getHoldedBy() << endl;
+
+}
+
 unordered_map<string, int> player_id;
 
 void print_map(vector<Player>& players) {
 
-
     for (size_t i = 0; i < MAP_HEIGHT; i++) {
-        
         for (size_t j = 0; j < MAP_WIDTH; j++) {
 
             bool cell_printed = false; // POR Q???
 
             for (size_t k = 0; k < players.size(); k++) {
-
                 if(i == players[k].pos.y && j == players[k].pos.x) {
                     cout << players[k].skin;
                     cell_printed = true;
@@ -51,56 +63,33 @@ void print_map(vector<Player>& players) {
                 }
             }
 
+            for (size_t k = 0; k < bombs.size(); k++) {
+                if(i == bombs[k].pos.y && j == bombs[k].pos.x) {
+                    cout << bombs[k].skin;
+                    cell_printed = true;
+                    // continue;
+                }
+            }
+
             if (cell_printed) continue; // POR QUE ISSO FUNCIONA???
 
-            if(i == bomb1.pos->y && j == bomb1.pos->x) {
-                cout << bomb1.skin;
-                continue;
-            }
 
-            if (i == 0 || i == MAP_HEIGHT - 1) {
-                cout << "=";
-            } 
-            else {
-                if (j == 0 || j == MAP_WIDTH - 1) 
-                    cout << "|";
+            if (i == 0 || i == MAP_HEIGHT - 1) cout << "=";
 
-                else cout << " ";
-            }
+            else if (j == 0 || j == MAP_WIDTH - 1) cout << "|";
+
+            else cout << " ";
         }
         cout << endl;
     }
     cout << endl;
+    print_infos(players);
 }
 
 void update(Player& player) {
 
     while (true) {
-    
-        if(player_id[player.getName()] == 0) {
-            
-            if (Input::kbhit()) {
-                char input = Input::getch();  // Read a keystroke without waiting
-                if (input == 'w') player.pos.y--;
-                else if (input == 's') player.pos.y++;
-                else if (input == 'a') player.pos.x--;
-                else if (input == 'd') player.pos.x++;
-            }
-        }
-        else {
-            if (Input::kbhit()) {
-                char input = Input::getch();  // Read a keystroke without waiting
-                if (input == 'i') player.pos.y--;
-                else if (input == 'k') player.pos.y++;
-                else if (input == 'j') player.pos.x--;
-                else if (input == 'l') player.pos.x++;
-            }
-        }
-
-        if (player.pos.x < 1) player.pos.x = 1;
-        if (player.pos.x > MAP_WIDTH - 2) player.pos.x = MAP_WIDTH - 2;
-        if (player.pos.y < 1) player.pos.y = 1;
-        if (player.pos.y > MAP_HEIGHT - 2) player.pos.y = MAP_HEIGHT - 2;
+        player.move();
     }
 }
 
@@ -134,7 +123,6 @@ int main(int argc, char const *argv[]) {
     thread t1(update, ref(players[0]));
     thread t2(update, ref(players[1]));
     thread render_thread(render, ref(players));
-
 
     t1.join();
     t2.join();
