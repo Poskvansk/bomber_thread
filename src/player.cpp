@@ -2,15 +2,8 @@
 
 #include <iostream>
 
-// struct Position {
-//     int x;
-//     int y;
-//     Position() : x(10), y(10) {};
-//     Position(int x, int y) : x(x), y(y) {};
-// };
-
 Player::~Player() {
-    std::cout << "Player " << this->name << " has been destroyed" << std::endl;
+    // std::cout << "Player " << this->name << " has been destroyed" << std::endl;
 }
 
 void Player::setName(std::string& name) {
@@ -38,6 +31,7 @@ char Player::getDirection() {
 }
 
 void Player::move() {
+
 
     char up = 'w';
     char down = 's';
@@ -111,9 +105,15 @@ void Player::move() {
         else if (input == grab) {
             this->grabBomb();
         }
-    }
-}
 
+        else if (input == 'v') game_over = true;
+    }
+
+    if(this->pos.x == 0) this->pos.x = 1;
+    if(this->pos.x == MAP_WIDTH - 1) this->pos.x = MAP_WIDTH - 2;
+    if(this->pos.y == 0) this->pos.y = 1;
+    if(this->pos.y == MAP_HEIGHT - 1) this->pos.y = MAP_HEIGHT - 2;
+}
 
 bool Player::getHasBomb() {
     return this->hasBomb;

@@ -13,6 +13,10 @@
 extern std::unordered_map<std::string, int> player_id;
 extern std::vector<Bomb> bombs;
 
+extern const int MAP_WIDTH;
+extern const int MAP_HEIGHT;
+extern bool game_over;
+
 class Player {
     private:
         std::string name;

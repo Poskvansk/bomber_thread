@@ -1,0 +1,7 @@
+John,315
+Beltrano,151
+Fred,150
+Vlad,110
+Joseph,101
+Bob,99
+Dan,15
