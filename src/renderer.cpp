@@ -1,5 +1,7 @@
 #include "renderer.hpp"
 
+sem_t rendered;
+
 void print_infos(std::vector<Player>& players) {
 
     std::cout << "player " << players[0].getName() << " position " << players[0].pos.x << " " << players[0].pos.y << " direction " << players[0].getDirection()
@@ -13,6 +15,8 @@ void print_infos(std::vector<Player>& players) {
 }
 
 void print_map(std::vector<Player>& players) {
+
+    // sem_wait(&rendered);
 
     for (size_t i = 0; i < MAP_HEIGHT; i++) {
         for (size_t j = 0; j < MAP_WIDTH; j++) {
@@ -54,6 +58,7 @@ void print_map(std::vector<Player>& players) {
     }
     std::cout << std::endl;
     print_infos(players);
+    // sem_post(&rendered);
 }
 
 
@@ -62,6 +67,6 @@ void render(std::vector<Player>& players) {
     while (!game_over) {
         system(CLEAR);
         print_map(players);
-        usleep(80000); // 100ms delay
+        usleep(8000); //
     }
 }

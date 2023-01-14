@@ -2,7 +2,7 @@ OUTPUT	= bomber
 
 
 CC = g++
-CFLAGS = -Iinclude
+CFLAGS = -Iinclude -std=c++11
 
 SRC_DIR = src
 OBJ_DIR = obj

@@ -5,6 +5,9 @@
 #include <iostream>
 #include <unordered_map>
 #include <vector>
+#include <mutex>
+// #include <pthread.h>
+// #include <semaphore.h>
 
 #include "position.hpp"
 #include "input.hpp"
@@ -16,6 +19,13 @@ extern std::vector<Bomb> bombs;
 extern const int MAP_WIDTH;
 extern const int MAP_HEIGHT;
 extern bool game_over;
+
+extern std::mutex p1_mtx;
+// std::mutex p2_mtx;
+
+// extern sem_t p1_sem;
+// extern sem_t p2_sem;
+// extern sem_t rendered;
 
 class Player {
     private:
@@ -29,7 +39,7 @@ class Player {
         char skin;
         Position pos;
 
-        Player(std::string name, char skin) : name(name), score(0), skin(skin) {};
+        Player(std::string name, char skin);
         ~Player();
 
         void setName(std::string& name);

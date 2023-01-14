@@ -6,7 +6,7 @@
 #include <mutex>
 
 //////////////////////////////////////////
-#include "player.hpp"
+// #include "player.hpp"
 #include "bomb.hpp"
 #include "input.hpp"
 #include "renderer.hpp"
@@ -30,6 +30,7 @@ bool game_over = false;
 void update(Player& player) {
     while (!game_over) {
         player.move();
+        usleep(500); //
     }
 }
 
@@ -51,6 +52,8 @@ int main(int argc, char const *argv[]) {
 
     thread t1(update, ref(players[0]));
     thread t2(update, ref(players[1]));
+
+    // sem_init(&rendered, 0, 1);
     thread render_thread(render, ref(players));
 
     // Player* player11 = &players[0];

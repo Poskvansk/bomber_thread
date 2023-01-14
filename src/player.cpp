@@ -2,6 +2,14 @@
 
 #include <iostream>
 
+// int count = 0;
+// sem_t p1_sem;
+// sem_t p2_sem;
+std::mutex p1_mtx;
+
+Player::Player(std::string name, char skin) : name(name), score(0), skin(skin) {};
+
+
 Player::~Player() {
     // std::cout << "Player " << this->name << " has been destroyed" << std::endl;
 }
@@ -32,7 +40,6 @@ char Player::getDirection() {
 
 void Player::move() {
 
-
     char up = 'w';
     char down = 's';
     char left = 'a';
@@ -46,7 +53,7 @@ void Player::move() {
         right = 'l';
         grab = ' '; // space
     }
-    
+
     if (Input::kbhit()) {
         char input = Input::getch();  // Read a keystroke without waiting
 
