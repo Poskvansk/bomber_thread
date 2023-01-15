@@ -3,6 +3,7 @@ OUTPUT	= bomber
 
 CC = g++
 CFLAGS = -Iinclude
+FFLAGS = -lSDL2
 
 SRC_DIR = src
 OBJ_DIR = obj
@@ -13,7 +14,7 @@ OBJ = $(SRC:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o)
 all: $(OUTPUT)
 
 $(OUTPUT): $(OBJ)
-	$(CC) $(CFLAGS) -o $@ $^
+	$(CC) $(CFLAGS) $^ $(FFLAGS) -o $@
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 	$(CC) $(CFLAGS) -c -o $@ $<

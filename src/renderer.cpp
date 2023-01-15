@@ -1,4 +1,5 @@
 #include "renderer.hpp"
+#include <SDL2/SDL.h>
 
 void print_infos(std::vector<Player>& players) {
 
@@ -62,6 +63,7 @@ void render(std::vector<Player>& players) {
     while (!game_over) {
         system(CLEAR);
         print_map(players);
-        usleep(80000); // 100ms delay
+        SDL_Delay(100);
+        
     }
 }

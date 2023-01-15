@@ -30,89 +30,24 @@ char Player::getDirection() {
     return this->direction;
 }
 
-void Player::move() {
-
-
-    char up = 'w';
-    char down = 's';
-    char left = 'a';
-    char right = 'd';
-    char grab = 'q';
-
-    if(player_id[this->name] == 1) {
-        up = 'i';
-        down = 'k';
-        left = 'j';
-        right = 'l';
-        grab = ' '; // space
-    }
-    
-    if (Input::kbhit()) {
-        char input = Input::getch();  // Read a keystroke without waiting
-
-        if (input == up) {
-            this->pos.y--;
-            this->setDirection('w');
-            if (this->getHasBomb()) {
-                for(int i = 0; i < bombs.size(); i++) {
-                    if (bombs[i].getHoldedBy() == player_id[this->name]) {
-                        bombs[i].pos.y--;
-                        break;
-                    }
-                }
-            }
-        }
-
-        else if (input == down) {
-            this->pos.y++;
-            this->setDirection('s');
-            if (this->getHasBomb()) {
-                for(int i = 0; i < bombs.size(); i++) {
-                    if (bombs[i].getHoldedBy() == player_id[this->name]) {
-                        bombs[i].pos.y++;
-                        break;
-                    }
-                }
-            }
-        }
-
-        else if (input == left) {
-            this->pos.x--;
-            this->setDirection('a');
-            if (this->getHasBomb()) {
-                for(int i = 0; i < bombs.size(); i++) {
-                    if (bombs[i].getHoldedBy() == player_id[this->name]) {
-                        bombs[i].pos.x--;
-                        break;
-                    }
-                }
-            }
-        }
-
-        else if (input == right) {
-            this->pos.x++;
-            this->setDirection('d');
-            if (this->getHasBomb()) {
-                for(int i = 0; i < bombs.size(); i++) {
-                    if (bombs[i].getHoldedBy() == player_id[this->name]) {
-                        bombs[i].pos.x++;
-                        break;
-                    }
-                }
-            }
-        }
-        
-        else if (input == grab) {
-            this->grabBomb();
-        }
-
-        else if (input == 'v') game_over = true;
-    }
-
-    if(this->pos.x == 0) this->pos.x = 1;
-    if(this->pos.x == MAP_WIDTH - 1) this->pos.x = MAP_WIDTH - 2;
+void Player::moveUp() {
+    this->pos.y--;
     if(this->pos.y == 0) this->pos.y = 1;
+}
+
+void Player::moveDown() {
+    this->pos.y++;
     if(this->pos.y == MAP_HEIGHT - 1) this->pos.y = MAP_HEIGHT - 2;
+}
+
+void Player::moveLeft() {
+    this->pos.x--;
+    if(this->pos.x == 0) this->pos.x = 1;
+}
+
+void Player::moveRight() {
+    this->pos.x++;
+    if(this->pos.x == MAP_WIDTH - 1) this->pos.x = MAP_WIDTH - 2;
 }
 
 bool Player::getHasBomb() {
@@ -172,7 +107,4 @@ void Player::grabBomb() {
             }
         }
     }
-
-
-
 }

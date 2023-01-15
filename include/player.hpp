@@ -5,10 +5,12 @@
 #include <iostream>
 #include <unordered_map>
 #include <vector>
+#include <SDL2/SDL.h>
 
 #include "position.hpp"
 #include "input.hpp"
 #include "bomb.hpp"
+#include "InputManager.hpp"
 
 extern std::unordered_map<std::string, int> player_id;
 extern std::vector<Bomb> bombs;
@@ -43,8 +45,10 @@ class Player {
 
         bool getHasBomb();
 
-        void move();
-
+        void moveUp();
+        void moveDown();
+        void moveLeft();
+        void moveRight();
         void grabBomb();
 };
 
