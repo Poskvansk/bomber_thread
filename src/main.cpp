@@ -23,6 +23,8 @@ Bomb bomb1(p, 10);
 vector<Bomb> bombs = {bomb1};
 unordered_map<string, int> player_id;
 
+mutex mtx_input;
+
 const int MAP_WIDTH = 150;
 const int MAP_HEIGHT = 15;
 bool game_over = false;
@@ -48,7 +50,11 @@ void update(Player& player) {
 
     while (!game_over && !inputManager.QuitRequested()) {
 
+        // CONDIÇÃO DE CORRIDA - UM PLAYER ACABAVA TRABVANDO
+        // POR QUE??
+        mtx_input.lock();
         inputManager.Update();
+        mtx_input.unlock();
 
         if (inputManager.IsKeyDown(up)) {
             player.moveUp();
